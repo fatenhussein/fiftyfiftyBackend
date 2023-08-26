@@ -5,8 +5,9 @@ const ordersSchema = new mongoose.Schema({
     default: Date.now(),
   },
   customerID: {
-    type: { type: mongoose.Schema.ObjectId, ref: 'customers' },
-  },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'customers'
+},
   orderStatus: {
     type: String,
     enum: ['pending', 'shipped', 'delivered'],

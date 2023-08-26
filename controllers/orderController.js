@@ -3,7 +3,7 @@ const Customer = require('../models/customerModel');
 // Get all orders
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find();
+    const orders = await Order.find().populate('customerID');
 
     res.status(200).json({
       status: 'success',
@@ -31,7 +31,7 @@ exports.createOrder = async (req, res) => {
     const customer = await Customer.findById(req.body.customerID);
     customer.orders.push(newOrder._id); // push the new order's ID into the customer's orders array
     await customer.save(); // don't forget to save the customer document after modifying it
-
+    // await order.save();
     // Send response
     res.status(201).json({
       status: 'success',
