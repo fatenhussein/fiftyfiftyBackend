@@ -12,17 +12,12 @@ const offerSchema = new mongoose.Schema({
   priceValidUntil: {
     type: Date
   },
-  availability: {
-    type: String
+  priceValidStart: {
+    type: Date
   },
+
   imgUrl: {
     type: String
-  },
-  seller: {
-    type: String
-  },
-  validFrom: {
-    type: Date
   },
 });
 
