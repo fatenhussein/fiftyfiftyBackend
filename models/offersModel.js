@@ -15,7 +15,7 @@ const offerSchema = new mongoose.Schema({
   availability: {
     type: String
   },
-  url: {
+  imgUrl: {
     type: String
   },
   seller: {
