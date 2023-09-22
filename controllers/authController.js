@@ -83,8 +83,18 @@ exports.adminSignIn = async (req, res) => {
       throw new Error('Please provide your email and password');
     }
 
-    //2) Check if user exists and password is correct
+    //2) Check if user exists
     const currentAdmin = await Admin.findOne({ email }).select('+password');
+
+    if (!currentAdmin) {
+      throw new Error('Admin not found with this email address');
+    }
+
+    // Check if password is correct
+    const correct = await currentAdmin.correctPassword(password, currentAdmin.password);
+    if (!correct) {
+        throw new Error('Incorrect password');
+    }
 
     //3) If everything ok, send token to client
     const token = jwt.sign({ id: currentAdmin._id }, process.env.JWT_SECRET);
