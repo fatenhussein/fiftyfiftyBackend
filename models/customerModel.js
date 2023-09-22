@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const customerSchema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true,
     required: true,
   },
 
@@ -47,6 +46,11 @@ customerSchema.pre('save', async function (next) {
   this.confirmPassword = undefined;
   next();
 });
+
+customerSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
 
 const customerModel = mongoose.model('customers', customerSchema);
 module.exports = customerModel;

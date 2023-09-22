@@ -32,33 +32,44 @@ exports.signUp = async (req, res) => {
     });
   }
 };
-
 exports.signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    //1)Check if email and password exist
+    //1) Check if email and password exist
     if (!email || !password) {
-      throw new Error('Please provide your email and password');
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Please provide your email and password',
+      });
     }
-    //2)Check if user exist && password is correct
-    const currentUser = await Customer.findOne({ email }).select('+password');
-    console.log(currentUser);
-    //3)If everything ok, send token to client
 
+    //2) Check if user exist
+    const currentUser = await Customer.findOne({ email }).select('+password');
+
+    if (!currentUser || !(await currentUser.correctPassword(password, currentUser.password))) {
+      return res.status(401).json({
+        status: 'fail',
+        message: 'Incorrect email or password',
+      });
+    }
+
+    //3) If everything ok, send token to client
     const token = jwt.sign({ id: currentUser._id }, process.env.JWT_SECRET);
+
     res.status(200).json({
       status: 'success',
       token,
       id: currentUser._id,
     });
   } catch (err) {
-    res.status(404).json({
-      status: 'fail',
+    res.status(500).json({
+      status: 'error',
       message: err.message,
     });
   }
 };
+
 
 
 /*admin */
