@@ -7,8 +7,8 @@ const customerRouter = require('./routes/customerRoute');
 
 const orderRouter = require('./routes/orderRoute');
 
-const adminRoute = require("./routes/adminRoute")
-
+const adminRoute = require('./routes/adminRoute');
+const imageUploadRoute = require('./routes/imageUploadRoute');
 
 
 // create middleware
@@ -26,10 +26,11 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-
 app.use('/api/v1/customers', customerRouter);
 
 app.use('/api/v1/offers', offerRouter);
-app.use('/api/v1/orders',orderRouter);
+app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/admin', adminRoute);
+
+// app.use('/api/v1/', imageUploadRoute);
 module.exports = app;
